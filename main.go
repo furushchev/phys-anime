@@ -8,6 +8,8 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	NewTask1(w)
+	//SetupTask1(w)
+	//SetupTask2(w)
+	SetupTask4(w)
 	w.Exec()
 }

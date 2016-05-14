@@ -6,15 +6,14 @@ import (
 	"runtime"
 	"time"
 	"github.com/Sirupsen/logrus"
-	"sync"
 )
 
 type Window struct {
 	window *glfw.Window
 	Width, Height int
 	FrameRate int
-	onUpdateCallbacks []func(*Window)
-	objects []Drawable
+	particles []*Particle
+	effectors []Effector
 	step bool
 }
 
@@ -79,8 +78,18 @@ func (this *Window)onKeyPressed(win *glfw.Window, key glfw.Key, code int, action
 	}
 }
 
-func (this *Window)AddObject(o Drawable) {
-	this.objects = append(this.objects, o)
+func (this *Window)AddParticle(p *Particle) {
+	this.particles = append(this.particles, p)
+}
+
+func (this *Window)AddEffectors(e Effector) {
+	this.effectors = append(this.effectors, e)
+}
+
+func (this *Window)update(dt float64) {
+	for _, e := range this.effectors {
+		e.Update(this.particles, dt)
+	}
 }
 
 func (this *Window)drawObjects() {
@@ -91,34 +100,10 @@ func (this *Window)drawObjects() {
 	gl.BlendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
 	gl.LoadIdentity()
 
-	for _, obj := range this.objects {
-		obj.Draw()
+	for _, p := range this.particles {
+		p.Draw()
 	}
 	gl.Flush()
-}
-
-func (this *Window)update(dt float64) {
-	var wg sync.WaitGroup
-	for _, obj := range this.objects {
-		wg.Add(1)
-		go func(item Drawable) {
-			defer wg.Done()
-			item.Update(dt, float64(this.Width), float64(this.Height))
-		}(obj)
-	}
-	wg.Wait()
-}
-
-func (this *Window)checkCollision() {
-	var wg sync.WaitGroup
-	for _, obj := range this.objects {
-		wg.Add(1)
-		go func(item Drawable) {
-			defer wg.Done()
-			item.CheckCollision(this.objects)
-		}(obj)
-	}
-	wg.Wait()
 }
 
 func (this *Window)Exec() {
@@ -129,17 +114,7 @@ func (this *Window)Exec() {
 	defer ticker.Stop()
 
 	for !this.window.ShouldClose() {
-		var wg sync.WaitGroup
-		for _, f := range this.onUpdateCallbacks {
-			wg.Add(1)
-			go func(){
-				defer wg.Done()
-				f(this)
-			}()
-		}
-		wg.Wait()
 		this.update(1.0 / float64(this.FrameRate))
-		this.checkCollision()
 		this.drawObjects()
 		this.window.SwapBuffers()
 		glfw.PollEvents()
