@@ -82,7 +82,7 @@ func (this *Window)AddParticle(p *Particle) {
 	this.particles = append(this.particles, p)
 }
 
-func (this *Window)AddEffectors(e Effector) {
+func (this *Window)AddEffector(e Effector) {
 	this.effectors = append(this.effectors, e)
 }
 

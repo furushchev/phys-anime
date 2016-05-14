@@ -11,12 +11,12 @@ func SetupTask2(w *Window) {
 		p := NewParticle(rand.Float64() * float64(w.Width), rand.Float64() * float64(w.Height), 10, c)
 		w.AddParticle(p)
 	}
-	w.AddEffectors(NewGravityEffector(func(time, mass float64) m.Vec2 {
+	w.AddEffector(NewGravityEffector(func(time, mass float64) m.Vec2 {
 		fx := 0.0
 		if time < 1.0 {
 			fx = (rand.Float64() - 0.5) * 2000.0
 		}
 		return m.Vec2{fx, -9.8 / mass }
 	}))
-	w.AddEffectors(NewBoundaryEffector(float64(w.Width), float64(w.Height), false))
+	w.AddEffector(NewBoundaryEffector(float64(w.Width), float64(w.Height), false))
 }
