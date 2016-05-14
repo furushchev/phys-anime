@@ -1,6 +1,7 @@
 package main
 
 type Drawable interface {
-	Update(dt float32)
+	Update(dt, screenWidth, screenHeight float64)
+	CheckCollision(interface{})
 	Draw()
 }
