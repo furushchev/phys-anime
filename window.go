@@ -5,7 +5,6 @@ import (
 	"github.com/go-gl/glfw/v3.1/glfw"
 	"runtime"
 	"time"
-	"github.com/Sirupsen/logrus"
 )
 
 type Window struct {
@@ -58,7 +57,6 @@ func (this *Window)Terminate() {
 }
 
 func (this *Window)onResize(win *glfw.Window, w, h int) {
-	logrus.Infoln("onResize", w, h)
 	w, h = this.window.GetSize()
 	width, height := this.window.GetFramebufferSize()
 	gl.Viewport(0,0, int32(width), int32(height))

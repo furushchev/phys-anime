@@ -1,12 +1,12 @@
 package main
 
 type CollisionEffector struct {
-	Damping float64
+	damping float64
 }
 
-func NewCollisionEffector(damping float64) *CollisionEffector {
+func NewCollisionEffector(damping, windowWidth, windowHeight float64, gridXNum, gridYNum int) *CollisionEffector {
 	return &CollisionEffector{
-		Damping: damping,
+		damping: damping,
 	}
 }
 
@@ -20,8 +20,8 @@ func (this *CollisionEffector)Update(particles []*Particle, dt float64) {
 				// collide
 				p1.Pos = p1.Pos.Sub(p1p2.Mul(0.5))
 				p2.Pos = p2.Pos.Add(p1p2.Mul(0.5))
-				f1 := p1p2.Dot(v1) * this.Damping / (p1p2.Len() * p1p2.Len())
-				f2 := p1p2.Dot(v2) * this.Damping / (p1p2.Len() * p1p2.Len())
+				f1 := p1p2.Dot(v1) * this.damping / (p1p2.Len() * p1p2.Len())
+				f2 := p1p2.Dot(v2) * this.damping / (p1p2.Len() * p1p2.Len())
 				v1 = v1.Add(p1p2.Mul(f2 - f1))
 				v2 = v2.Add(p1p2.Mul(f1 - f2))
 				p1.PrevPos = p1.Pos.Sub(v1)
