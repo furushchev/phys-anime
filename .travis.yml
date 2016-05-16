@@ -1,0 +1,16 @@
+language: generic
+compiler: gcc
+os: linux
+dist: trusty
+sudo: required
+before_script:
+- sudo apt-get update
+- sudo apt-get install golang-1.6-go git libgl1-mesa-dev xorg-dev
+- export PATH=/usr/lib/go-1.6/bin:$PATH
+- mkdir go
+- cd go
+- export GOPATH=`pwd`
+script:
+- go get github.com/furushchev/phys-anime
+
+
