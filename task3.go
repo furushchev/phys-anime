@@ -7,8 +7,8 @@ import (
 
 func SetupTask3(w *Window) {
 
-	lineStart := m.Vec2{ 200, 200 }
-	lineEnd := m.Vec2{ 600, 500 }
+	lineStart := m.Vec2{ Task3LineStartPos[0], Task3LineStartPos[1] }
+	lineEnd := m.Vec2{ Task3LineEndPos[0], Task3LineEndPos[1] }
 	v := lineEnd.Sub(lineStart)
 
 	// initial randomize
