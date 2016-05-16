@@ -5,6 +5,7 @@ import (
 	"github.com/go-gl/glfw/v3.1/glfw"
 	"runtime"
 	"time"
+	"fmt"
 )
 
 type Window struct {
@@ -70,9 +71,9 @@ func (this *Window)onResize(win *glfw.Window, w, h int) {
 
 func (this *Window)onKeyPressed(win *glfw.Window, key glfw.Key, code int, action glfw.Action, mods glfw.ModifierKey) {
 	switch key {
-	case 's':
-		println("pressed s")
-		this.step = true
+	case glfw.KeyQ:
+		this.window.SetShouldClose(true)
+		fmt.Println("exit")
 	}
 }
 
