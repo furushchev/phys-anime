@@ -9,3 +9,4 @@ const Version = "1.0.0"
 const WindowWidth = 800
 const WindowHeight = 600
 const FrameRate = 50
+const NumParticles = 100
