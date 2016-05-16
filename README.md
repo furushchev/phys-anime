@@ -70,8 +70,44 @@ Implement Gravity using Verlet Integration
 
 #### Task2: Elastic collision
 
+```bash
+./bin/phys-anime 2
+```
+
+![Task2](docs/task2.gif)
+
 Implement collision between particles and screen boundaries
 
+```go
+// boundary.go より抜粋
+	// floor
+	if p.Pos.Y() - p.Radius < 0 {
+		p.Pos = m.Vec2{p.Pos.X(), 2.0 * p.Radius - p.Pos.Y() }
+		p.PrevPos = m.Vec2{p.PrevPos.X(), 2.0 * p.Radius - p.PrevPos.Y() }
+	}
+	...
+```
+
 #### Task3: Constraint on a line segment
+
+```bash
+./bin/phys-anime 3
+```
+
+![Task3](docs/task3.gif)
+
 #### Task4: Colliding circles
+
+```bash
+./bin/phys-anime 4
+```
+
+![Task4](docs/task4.gif)
+
 #### Task5: N-body problem
+
+```bash
+./bin/phys-anime 5
+```
+
+![Task5](docs/task5.gif)
