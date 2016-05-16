@@ -6,7 +6,7 @@ dist: trusty
 sudo: required
 env:
   - "PATH=/home/travis/gopath/bin:$PATH"
-before_script:
+before_install:
   - sudo apt-get update
   - sudo apt-get install git libgl1-mesa-dev xorg-dev
   - go get github.com/mitchellh/gox
