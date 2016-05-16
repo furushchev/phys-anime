@@ -1,16 +1,19 @@
-language: generic
-compiler: gcc
+language: go
+go:
+  - 1.6
 os: linux
 dist: trusty
 sudo: required
+env:
+  - "PATH=/home/travis/gopath/bin:$PATH"
 before_script:
-- sudo apt-get update
-- sudo apt-get install golang-1.6-go git libgl1-mesa-dev xorg-dev
-- export PATH=/usr/lib/go-1.6/bin:$PATH
-- mkdir go
-- cd go
-- export GOPATH=`pwd`
+  - sudo apt-get update
+  - sudo apt-get install git libgl1-mesa-dev xorg-dev
+  - go get github.com/mitchellh/gox
+  - gox -build-toolchain
+  - go get github.com/tcnksm/ghr
 script:
-- go get github.com/furushchev/phys-anime
-
-
+  - go get github.com/furushchev/phys-anime
+after_success:
+  - gox -output "dist/{{.OS}}_{{.Arch}}_{{.Dir}}"
+  - ghr --username furushchev --token $GITHUB_TOKEN --replace --prerelease --debug pre-release dist/
