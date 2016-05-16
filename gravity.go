@@ -20,7 +20,6 @@ func NewGravityEffector(force ForceFunc) *GravityEffector {
 
 func (this *GravityEffector)updateParticle(p *Particle, dt float64) {
 	prev2Pos, prevPos := p.PrevPos, p.Pos
-
 	fVec := this.Force(this.ElapsedTime, p.Mass).Mul(dt * dt)
 	p.PrevPos = prevPos
 	p.Pos = prevPos.Mul(2.0).Sub(prev2Pos).Add(fVec)

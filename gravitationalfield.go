@@ -3,12 +3,12 @@ package main
 import (
 	"math"
 	m "github.com/go-gl/mathgl/mgl64"
-	"sync"
 )
 
 type GravitationalFieldEffector struct {
 	G float64
 	epsilon float64
+	time float64
 }
 
 func NewGravitationalFieldEffector(G, epsilon float64) *GravitationalFieldEffector {
@@ -17,30 +17,51 @@ func NewGravitationalFieldEffector(G, epsilon float64) *GravitationalFieldEffect
 		epsilon: epsilon,
 	}
 }
-
-func (this *GravitationalFieldEffector)updateParticle(p *Particle, others []*Particle, dt float64) {
+/*
+func (this *GravitationalFieldEffector)updateParticle(p *Particle, others []*m.Vec2, dt float64) {
 	F := m.Vec2{ 0, 0 }
-	mu := sync.Mutex{}
-	wg := sync.WaitGroup{}
-	for _, otherParticle := range others {
-		wg.Add(1)
-		go func(op *Particle) {
-			defer wg.Done()
-			k := this.G * p.Mass * op.Mass / math.Pow(this.epsilon + op.Pos.Sub(p.Pos).Len(), 3)
-			f := op.Pos.Sub(p.Pos).Mul(k)
-			mu.Lock()
-			F = F.Add(f)
-			mu.Unlock()
-		}(otherParticle)
+	for _, op := range others {
+		k := this.G * p.Mass * op.Mass / math.Pow(this.epsilon + op.Pos.Sub(p.Pos).Len(), 3)
+		f := op.Pos.Sub(p.Pos).Mul(k)
+		F = F.Add(f)
 	}
-	wg.Wait()
-	println(F.X(), F.Y())
-	prev2Pos, prevPos := p.PrevPos, p.Pos
-	p.PrevPos = prevPos
-	p.Pos = prevPos.Mul(2.0).Sub(prev2Pos).Add(F)
-}
 
+	if math.IsNaN(F.Len()) {
+		F = m.Vec2{0.0, 0.0}
+	}
+
+	// gravity
+	fx := 0.0
+	if this.time < 1.0 {
+		fx = (rand.Float64() - 0.5) * 2000.0
+	}
+	F = F.Add(m.Vec2{fx, -9.8})
+
+	prev2Pos, prevPos := p.PrevPos, p.Pos
+	p.PrevPos = m.Vec2{ p.Pos.X(), p.Pos.Y() }
+	vf := F.Mul(dt * dt / p.Mass)
+	p.Pos = prevPos.Mul(2.0).Sub(prev2Pos)//.Add(vf)
+	println(p.PrevPos.X(), p.PrevPos.Y(), p.Pos.X(), p.Pos.Y(), vf.X(), vf.Y())
+
+}
+*/
 
 func (this *GravitationalFieldEffector)Update(particles []*Particle, dt float64) {
-	ApplyEffectToParticleWithOthers(particles, dt, this.updateParticle)
+	this.time += dt
+	for i, p := range particles {
+		F := m.Vec2{ 0, 0 }
+		for j, op := range particles {
+			if i == j {
+				continue
+			}
+			k := this.G * p.Mass * op.Mass / math.Pow(this.epsilon + op.Pos.Sub(p.Pos).Len(), 3)
+			f := op.Pos.Sub(p.Pos).Mul(k)
+			F = F.Add(f)
+		}
+		prev2Pos, prevPos := p.PrevPos, p.Pos
+		p.PrevPos = p.Pos
+		F = F.Add(m.Vec2{ 0.0, -9.8 }) // gravity
+		vf := F.Mul(dt * dt / p.Mass)
+		p.Pos = prevPos.Mul(2.0).Sub(prev2Pos).Add(vf)
+	}
 }

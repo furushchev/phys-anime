@@ -1,6 +1,8 @@
 package main
 
-import "runtime"
+import (
+	"runtime"
+)
 
 func main() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
