@@ -6,21 +6,23 @@ import (
 )
 
 func SetupTask3(w *Window) {
+
+	lineStart := m.Vec2{ 200, 200 }
+	lineEnd := m.Vec2{ 600, 500 }
+	v := lineEnd.Sub(lineStart)
+
 	// initial randomize
 	for i := 0; i < NumParticles; i++ {
 		c := RandomColor(i)
-		p := NewParticle(rand.Float64() * float64(w.Width), rand.Float64() * float64(w.Height), 10, c)
+		pos := lineStart.Add(v.Mul(rand.Float64()))
+		p := NewParticle(pos.X(), pos.Y(), 10, c)
 		w.AddParticle(p)
 	}
 
-	w.AddEffector(NewGravityEffector(func(time, mass float64) m.Vec2 {
-		fx := 0.0
-		if time < 0.5 {
-			fx = (rand.Float64() - 0.5) * 100.0
-		}
-		f := m.Vec2{fx, -9.8}
+	w.AddEffector(NewBeadEffector(lineStart, lineEnd, func(time, mass float64) m.Vec2 {
+		f := m.Vec2{ 0.0, -9.8 }
 		return f.Mul(1.0 / mass)
 	}))
-	w.AddEffector(NewBoundaryEffector(float64(w.Width), float64(w.Height), false))
+
 }
 

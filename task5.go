@@ -2,10 +2,9 @@ package main
 
 import (
 	"math/rand"
-	m "github.com/go-gl/mathgl/mgl64"
 )
 
-func SetupTask4(w *Window) {
+func SetupTask5(w *Window) {
 	// initial randomize
 	for i := 0; i < NumParticles; i++ {
 		c := RandomColor(i)
@@ -13,14 +12,7 @@ func SetupTask4(w *Window) {
 		w.AddParticle(p)
 	}
 
-	w.AddEffector(NewGravityEffector(func(time, mass float64) m.Vec2 {
-		fx := 0.0
-		if time < 0.5 {
-			fx = (rand.Float64() - 0.5) * 100.0
-		}
-		f := m.Vec2{fx, -9.8}
-		return f.Mul(1.0 / mass)
-	}))
+	w.AddEffector(NewGravitationalFieldEffector(6.67408e-11, 1))
 	w.AddEffector(NewBoundaryEffector(float64(w.Width), float64(w.Height), true))
 	w.AddEffector(NewCollisionEffector(0.99, float64(w.Width), float64(w.Height), 8, 4 ))
 }

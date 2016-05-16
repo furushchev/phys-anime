@@ -15,9 +15,11 @@ func SetupTask2(w *Window) {
 
 	w.AddEffector(NewGravityEffector(func(time, mass float64) m.Vec2 {
 		fx := 0.0
+		/*
 		if time < 0.5 {
 			fx = (rand.Float64() - 0.5) * 100.0
 		}
+		*/
 		f := m.Vec2{fx, -9.8}
 		return f.Mul(1.0 / mass)
 	}))

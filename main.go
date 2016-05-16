@@ -33,9 +33,11 @@ func main() {
 	case 2:
 		SetupTask2(w)
 	case 3:
-		//SetupTask3(w)
+		SetupTask3(w)
 	case 4:
 		SetupTask4(w)
+	case 5:
+		SetupTask5(w)
 	default:
 		printUsage()
 	}
