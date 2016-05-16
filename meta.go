@@ -8,11 +8,11 @@ const (
 )
 
 // Settings
-const (
+var (
 	WindowWidth = 1280
 	WindowHeight = 1080
 	FrameRate = 60
 	NumParticles = 100
-	Task3LineStartPos = []int{200, 200}
-	Task3LineEndPos = []int{1000, 800}
+	Task3LineStartPos = []float64{200, 200}
+	Task3LineEndPos = []float64{1000, 800}
 )
