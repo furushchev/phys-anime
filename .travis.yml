@@ -16,4 +16,4 @@ script:
   - go get github.com/furushchev/phys-anime
 after_success:
   - gox -output "dist/{{.OS}}_{{.Arch}}_{{.Dir}}"
-  - ghr --username furushchev --token $GITHUB_TOKEN --replace --prerelease --debug pre-release dist/
+  - if [ "$TRAVIS_TAG" != "" ]; then ghr -u furushchev -t $GITHUB_TOKEN -p 4 --replace --prerelease --delete --prerelease $TRAVIS_TAG dist/; fi
